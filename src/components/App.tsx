@@ -8,6 +8,7 @@ import EnterNamePage from "./pages/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./Home";
+import ClubHouse from "@pages/ClubHouse";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,9 @@ const App: React.FC = () => {
             <div className="">
               <Route path={`/login`}>
                 <EnterNamePage />
+              </Route>
+              <Route path={`/clubhouse`}>
+                <ClubHouse />
               </Route>
               <Route exact path={`/`}>
                 <Home />
