@@ -2,7 +2,7 @@
 import { IUser } from "@src/interfaces/IUser";
 import { HttpClient } from "./HttpClient";
 
-const api_domain = "https://wastezero-backend.herokuapp.com/api/v1";
+const api_domain = "https://aitu-tinder.herokuapp.com/api/v1";
 
 const endpoint = (path) => `${api_domain}/${path}`;
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ClubhouseCard } from "@atoms/ClubhouseCard";
-import { Link } from "react-router-dom";
+import PlusIcon from '@heroicons/outline/plus.svg'
 
 interface IDashboardTinderProps {}
 
@@ -39,6 +39,12 @@ const cards = [
   },
 ];
 
+const AddButton: React.FC = () => {
+  return <button className="rounded-full fixed bottom-4 right-2 p-3 bg-pink-500">
+    <PlusIcon className="h-6 w-6 text-white" />
+  </button>
+}
+
 const ClubHouse: React.FunctionComponent<IDashboardTinderProps> = (props) => {
   return (
     <div className="p-2">
@@ -52,6 +58,7 @@ const ClubHouse: React.FunctionComponent<IDashboardTinderProps> = (props) => {
           />
         </div>
       ))}
+      <AddButton />
     </div>
   );
 };
