@@ -37,4 +37,24 @@ export class Api extends HttpClient {
   public chats = () => {
     return this.instance.get('chats');
   }
+
+  public createChats = (body) => {
+    return this.instance.post('chats', body);
+  }
+
+  public messages = (chatId) => {
+    return this.instance.get(`messages?chat_id=${chatId}`);
+  }
+
+  public sendMessage = (body) => {
+    return this.instance.post(`messages`, body);
+  }
+
+  public userInfo = (userId) => {
+    return this.instance.get(`hacknu_users/${userId}`);
+  }
+
+  public matches = () => {
+    return this.instance.get(`matched_users`);
+  }
 }
