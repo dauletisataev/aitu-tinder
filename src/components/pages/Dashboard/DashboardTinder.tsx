@@ -21,9 +21,7 @@ const TinderCards: React.FC<{ users: any[] }> = ({ users }) => {
             onSwipe={(direction) => {
               const api = new Api(id);
               api.likeUser(person.id, {
-                hacknu_user: {
-                  like_type: direction == "right" ? "like" : "dislike",
-                },
+                like_type: direction == "right" ? "like" : "dislike",
               });
               setUsers(currentUsers.slice(1));
             }}
