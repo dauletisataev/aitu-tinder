@@ -1,5 +1,7 @@
 import * as React from "react";
 import TinderCard = require("react-tinder-card");
+import {Link} from 'react-router-dom';
+
 const TinderCards: React.FC = () => {
   const people = [
     {
@@ -56,10 +58,12 @@ const Switcher: React.FC = () => {
   return (
     <div className="flex justify-center items-center">
       <div className="shadow flex">
-        <div className="rounded-l p-2 bg-red-500 text-white w-20 text-center">
-          Tinder
-        </div>
-        <div className="rounded-r p-2 border-l w-20 text-center">Clubhouse</div>
+          <div className="rounded-l p-2 bg-red-500 text-white w-30 text-center">
+            Tinder
+          </div>
+        <Link to="/clubhouse">
+          <div className="rounded-r p-2 border-l w-30 text-center">Clubhouse</div>
+        </Link>
       </div>
     </div>
   );
