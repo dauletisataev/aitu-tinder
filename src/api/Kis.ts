@@ -33,4 +33,8 @@ export class Api extends HttpClient {
   public tags = () => {
     return this.instance.get("tags");
   };
+
+  public chats = () => {
+    return this.instance.get('chats');
+  }
 }
