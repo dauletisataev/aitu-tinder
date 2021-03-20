@@ -1,6 +1,5 @@
 import * as React from "react";
 import TinderCard = require("react-tinder-card");
-
 const TinderCards: React.FC = () => {
   const people = [
     {
@@ -29,11 +28,15 @@ const TinderCards: React.FC = () => {
     },
   ];
   return (
-    <div>
+    <div className="relative flex justify-center">
       {people.map((person, index) => {
         return (
-          <TinderCard key={`person-${index}`}>
-            <div className="relative">
+          <TinderCard
+            key={`person-${index}`}
+            className="absolute"
+            flickOnSwipe={false}
+          >
+            <div className="bg-white">
               <img
                 src={person.imageUrl}
                 className="w-80 h-80 object-cover rounded-2xl shadow-2xl"
