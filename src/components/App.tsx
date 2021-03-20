@@ -14,6 +14,7 @@ import HeartSvg from "@heroicons/solid/heart.svg";
 import ChatSvg from "@heroicons/solid/chat.svg";
 import UserSvg from "@heroicons/solid/user-circle.svg";
 import { NavLink, Redirect } from "react-router-dom";
+import RegistrationPage from "./pages/RegistrationPage";
 
 const Switcher: React.FC = () => {
   return (
@@ -68,12 +69,14 @@ const App: React.FC = () => {
             </Route>
             <div className="h-screen flex flex-col">
               <Switcher />
-              <Redirect from="/" to="/tinder" />
-              <Route path={`/login`}>
-                <EnterNamePage />
+              <Route exact path={`/registration`}>
+                <RegistrationPage />
               </Route>
               <Route path={`/clubhouse`}>
                 <ClubHouse />
+              </Route>
+              <Route exact path={`/`}>
+                <Home />
               </Route>
               <Route exact path={`/tinder`}>
                 <Home />

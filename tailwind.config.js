@@ -40,6 +40,7 @@ module.exports = {
       },
       boxShadow: {
         b: "0px 10px 12px -14px rgba(0,0,0,0.75)",
+        button: "0px 10px 53px 0px rgba(0,0,0,0.3)",
       },
       maxHeight: {
         "9/10": "90%",

@@ -1,5 +1,7 @@
 import * as React from "react";
 import TinderCard = require("react-tinder-card");
+import HeartSvg from "@heroicons/solid/heart.svg";
+import CancelSvg from "@heroicons/solid/x.svg";
 
 const TinderCards: React.FC = () => {
   const people = [
@@ -29,15 +31,15 @@ const TinderCards: React.FC = () => {
     },
   ];
   return (
-    <div className="relative flex justify-center mt-2">
+    <div className="relative flex justify-center items-center mt-2 flex-col h-full">
       {people.map((person, index) => {
         return (
           <TinderCard
             key={`person-${index}`}
-            className="absolute"
             flickOnSwipe={false}
+            className="absolute"
           >
-            <div className="bg-white">
+            <div className="rounded-2xl">
               <img
                 src={person.imageUrl}
                 className="w-80 h-80 object-cover rounded-2xl shadow-2xl"
@@ -49,6 +51,14 @@ const TinderCards: React.FC = () => {
           </TinderCard>
         );
       })}
+      <div className="mt-auto mb-24 flex space-x-4">
+        <div className="rounded-full shadow-button p-2 ">
+          <CancelSvg className="w-8 h-8 text-indigo-700" />
+        </div>
+        <div className="rounded-full shadow-button p-2">
+          <HeartSvg className="w-8 h-8 text-red-600" />
+        </div>
+      </div>
     </div>
   );
 };
@@ -58,7 +68,11 @@ interface IDashboardTinderProps {}
 const DashboardTinder: React.FunctionComponent<IDashboardTinderProps> = (
   props,
 ) => {
-  return <TinderCards />;
+  return (
+    <div className="flex-1">
+      <TinderCards />
+    </div>
+  );
 };
 
 export default DashboardTinder;
