@@ -28,7 +28,7 @@ const TinderCards: React.FC = () => {
     },
   ];
   return (
-    <div className="relative flex justify-center">
+    <div className="relative flex justify-center mt-2">
       {people.map((person, index) => {
         return (
           <TinderCard
@@ -58,7 +58,17 @@ const DashboardTinder: React.FunctionComponent<IDashboardTinderProps> = (
   props,
 ) => {
   return (
-    <div>
+    <div className="h-screen p-2">
+      <div className="flex justify-center items-center">
+        <div className="shadow flex">
+          <div className="rounded-l p-2 bg-red-500 text-white w-20 text-center">
+            Tinder
+          </div>
+          <div className="rounded-r p-2 border-l w-20 text-center">
+            Clubhouse
+          </div>
+        </div>
+      </div>
       <TinderCards />
     </div>
   );
