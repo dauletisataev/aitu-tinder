@@ -1,5 +1,6 @@
-import { IUserStore } from "./IUserStore";
+import { Action } from "easy-peasy";
 
 export type IStore = {
-  user: IUserStore;
+  id: string;
+  setId: Action<IStore, string>;
 };

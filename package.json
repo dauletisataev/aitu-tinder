@@ -30,7 +30,8 @@
     "start": "yarn run start-dev",
     "start-dev": "webpack-dev-server --config=configs/webpack/dev.js",
     "start-prod": "yarn run build && node server.js",
-    "test": "jest --coverage --watchAll --config=configs/jest.json"
+    "test": "jest --coverage --watchAll --config=configs/jest.json",
+    "deploy": "yarn build && cp -r ./dist/* ../aitu-dist/dist && cd ../aitu-dist && git add . && git commit -m 'next' && git push heroku master && cd ../tinder-aitu"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",

@@ -14,12 +14,16 @@ type error = {
 export type ApiResponse<T> = response<T> | error;
 
 export class Api extends HttpClient {
-  public constructor() {
-    super(api_domain);
+  public constructor(id) {
+    super(api_domain, id);
   }
 
   public register = (body) => {
     return this.instance.post("sign_up", body);
+  };
+
+  public who_am_i = () => {
+    return this.instance.get("who_am_i");
   };
 
   public topics = () => {
@@ -35,26 +39,33 @@ export class Api extends HttpClient {
   };
 
   public chats = () => {
-    return this.instance.get('chats');
-  }
+    return this.instance.get("chats");
+  };
 
   public createChats = (body) => {
-    return this.instance.post('chats', body);
-  }
+    return this.instance.post("chats", body);
+  };
 
   public messages = (chatId) => {
     return this.instance.get(`messages?chat_id=${chatId}`);
-  }
+  };
 
   public sendMessage = (body) => {
     return this.instance.post(`messages`, body);
-  }
+  };
 
   public userInfo = (userId) => {
     return this.instance.get(`hacknu_users/${userId}`);
-  }
+  };
 
   public matches = () => {
     return this.instance.get(`matched_users`);
-  }
+  };
+  public userspoll = () => {
+    return this.instance.get("hacknu_users");
+  };
+
+  public likeUser = (id, body) => {
+    return this.instance.put(`hacknu_users/${id}`, body);
+  };
 }

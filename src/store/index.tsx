@@ -3,12 +3,10 @@ import { IStore } from "./IStore";
 
 export default createStore<IStore>(
   {
-    user: {
-      state: null,
-      setUser: action((store, user) => {
-        store.state = user;
-      }),
-    },
+    id: "",
+    setId: action((store, id) => {
+      store.id = id;
+    }),
   },
   {
     devTools: true,

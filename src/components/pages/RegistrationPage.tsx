@@ -11,28 +11,34 @@ import cn from "classnames";
 import LogoUrl from "@assets/img/baq-logo.jpg";
 import aituBridge from "@btsd/aitu-bridge";
 import { useHistory } from "react-router-dom";
+import { hashString, setKisToken } from "@src/utils/utils";
+import { useStoreActions, useStoreState } from "@src/hooks";
 
 interface IRegistrationPageProps {}
 
 const RegistrationPage: React.FunctionComponent<IRegistrationPageProps> = (
   props,
 ) => {
-  const api = new Api();
   const history = useHistory();
+
+  const [user, setUser] = React.useState(null);
 
   const [name, setName] = React.useState("");
   const [lastname, setLastname] = React.useState("");
   const [city, setCity] = React.useState("");
   const [lat, setLat] = React.useState(0);
   const [lng, setLng] = React.useState(0);
-  const [id, setId] = React.useState("");
   const [tags, setTags] = React.useState([]);
   const [avatar, setAvatar] = React.useState("");
   const [age, setAge] = React.useState(0);
   const [gender, setGender] = React.useState("");
   const [inFirstStage, setInFirstStage] = React.useState(true);
 
+  const setId = useStoreActions((store) => store.setId);
+  const id = useStoreState((store) => store.id);
+
   React.useEffect(() => {
+    const api = new Api("");
     api.tags().then(({ data }) => {
       setTags(
         data.map((tag) => {
@@ -42,10 +48,11 @@ const RegistrationPage: React.FunctionComponent<IRegistrationPageProps> = (
       console.log(tags);
     });
     aituBridge.getMe().then((data) => {
+      setUser(data);
       setName(data.name);
       setLastname(data.lastname);
       setAvatar(data.avatar);
-      setId(data.id);
+      setId(`${hashString(data.id)}`);
     });
 
     aituBridge.getGeo().then((data) => {
@@ -55,11 +62,19 @@ const RegistrationPage: React.FunctionComponent<IRegistrationPageProps> = (
   }, []);
 
   const onRegister = () => {
+    // alert("id = " + id);
+    const api = new Api(id);
+
     api
       .register({
         user_tags_attributes: tags
           .filter((tag) => tag.selected)
           .map((tag) => ({ tag_id: tag.id })),
+        hacknu_preference_attributes: {
+          min_age: 18,
+          max_age: 30,
+          distance: 25000,
+        },
         name,
         lastname,
         gender,
@@ -67,15 +82,18 @@ const RegistrationPage: React.FunctionComponent<IRegistrationPageProps> = (
         city,
         lat,
         lng,
+        sign: user.sign,
         avatar_url: avatar,
+        aitu_id_string: user.id,
       })
       .then(() => {
-        history.push("/tinder");
+        window.location.reload();
       });
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4">
+      {/* {JSON.stringify(user)} */}
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
           className="mx-auto h-12 w-auto rounded-md"

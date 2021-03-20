@@ -6,100 +6,61 @@ import { StoreProvider } from "easy-peasy";
 import store from "@src/store";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Home from "./Home";
-import ClubHouse from "@pages/ClubHouse";
-import FireSvg from "@heroicons/solid/fire.svg";
-import HeartSvg from "@heroicons/solid/heart.svg";
-import ChatSvg from "@heroicons/solid/chat.svg";
-import UserSvg from "@heroicons/solid/user-circle.svg";
-import { NavLink, Redirect, Link } from "react-router-dom";
 import RegistrationPage from "./pages/RegistrationPage";
 import { ChatPage } from "@pages/Chat";
-import {ChatsPage} from "@pages/Chats";
-
-const Switcher: React.FC = () => {
-  return (
-    <div className="flex justify-center items-center mt-2">
-      <div className="shadow flex">
-        <NavLink
-          to="/tinder"
-          activeClassName="bg-red-500 text-white"
-          className="rounded-l p-2 w-30 text-center w-24"
-        >
-          Tinder
-        </NavLink>
-        <NavLink
-          to="/clubhouse"
-          activeClassName="bg-red-500 text-white"
-          className="rounded-r p-2 border-l w-30 text-center w-24"
-        >
-          Clubhouse
-        </NavLink>
-      </div>
-    </div>
-  );
-};
-
-const BottomNavigation: React.FC = () => {
-  return (
-    <div className="p-2 border-t w-full mt-auto flex justify-between">
-      <NavLink
-        to="/tinder"
-        className="text-gray-400"
-        activeClassName="text-red-500"
-      >
-        <FireSvg className="w-10 h-10" />
-      </NavLink>
-      <div>
-        <HeartSvg className="w-10 h-10 text-gray-400" />
-      </div>
-      <NavLink
-        to="/chats"
-        className="text-gray-400"
-        activeClassName="text-red-500"
-      >
-        <ChatSvg className="w-10 h-10" />
-      </NavLink>
-      <div>
-        <UserSvg className="w-10 h-10 text-gray-400" />
-      </div>
-    </div>
-  );
-};
+import AuthFencePage from "./pages/AuthFencePage";
+import aituBridge from "@btsd/aitu-bridge";
+import { Api } from "@src/api/Kis";
+import LoadingContainer from "./atoms/LoadingContainer";
+import { hashString } from "@src/utils/utils";
+import { useStoreActions } from "@src/hooks";
 
 const App: React.FC = () => {
+  // const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(false);
+  const [isRegisted, setIsRegistred] = React.useState(true);
+
+  React.useEffect(() => {
+    /*aituBridge.getMe().then((data) => {
+      const api = new Api(hashString(data.id));
+      api
+        .who_am_i()
+        .then(() => {
+          alert("succes id = " + hashString(data.id));
+          setIsRegistred(true);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });*/
+  }, []);
+
   return (
     <StoreProvider store={store}>
       <Router>
-        <div className="font-helvetica">
-          <Switch>
-            <Route exact path="/404">
-              Not Found
-            </Route>
-            <Route path={`/chat/:chatId/:userId`}>
-              <ChatPage />
-            </Route>
-            <Route exact path={`/registration`}>
-              <RegistrationPage />
-            </Route>
-            <Route path={`/chats`}>
-              <ChatsPage />
-            </Route>
-            <div className="h-screen flex flex-col">
-              <Switcher />
-              <Route path={`/clubhouse`}>
-                <ClubHouse />
-              </Route>
-              <Route exact path={`/`}>
-                <Home />
-              </Route>
-              <Route exact path={`/tinder`}>
-                <Home />
-              </Route>
-              <BottomNavigation />
+        <LoadingContainer loading={loading}>
+          {isRegisted ? (
+            <div className="font-helvetica">
+              <Switch>
+                <Route exact path="/404">
+                  Not Found
+                </Route>
+                <Route path={`/`}>
+                  <AuthFencePage />
+                </Route>
+              </Switch>
             </div>
-          </Switch>
-        </div>
+          ) : (
+            <>
+              <Route path={`/registration`}>
+                <RegistrationPage />
+              </Route>
+              <Route path={`/`}>
+                <RegistrationPage />
+              </Route>
+            </>
+          )}
+        </LoadingContainer>
       </Router>
       <ToastContainer />
     </StoreProvider>

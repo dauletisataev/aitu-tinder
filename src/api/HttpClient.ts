@@ -7,12 +7,12 @@ declare module "axios" {
 
 export abstract class HttpClient {
   protected readonly instance: AxiosInstance;
-
-  public constructor(baseURL: string) {
+  protected id = "";
+  public constructor(baseURL: string, id: string) {
     this.instance = axios.create({
       baseURL,
     });
-
+    this.id = id;
     this._initializeResponseInterceptor();
   }
 
@@ -26,8 +26,7 @@ export abstract class HttpClient {
   };
 
   private _handleRequest = (config: AxiosRequestConfig) => {
-    const token = getCookie("kis_token");
-    config.headers["Authorization"] = `1`;
+    config.headers["Authorization"] = this.id;
 
     return config;
   };
