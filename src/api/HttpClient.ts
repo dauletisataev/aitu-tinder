@@ -27,7 +27,7 @@ export abstract class HttpClient {
 
   private _handleRequest = (config: AxiosRequestConfig) => {
     const token = getCookie("kis_token");
-    if (token) config.headers["Authorization"] = `Bearer ${token}`;
+    if (token) config.headers["Authorization"] = `${token}`;
 
     return config;
   };

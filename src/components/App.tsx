@@ -15,6 +15,7 @@ import ChatSvg from "@heroicons/solid/chat.svg";
 import UserSvg from "@heroicons/solid/user-circle.svg";
 import { NavLink, Redirect } from "react-router-dom";
 import RegistrationPage from "./pages/RegistrationPage";
+import {ChatPage} from "@pages/Chat";
 
 const Switcher: React.FC = () => {
   return (
@@ -66,6 +67,9 @@ const App: React.FC = () => {
           <Switch>
             <Route exact path="/404">
               Not Found
+            </Route>
+            <Route path={`/chat`}>
+              <ChatPage />
             </Route>
             <div className="h-screen flex flex-col">
               <Switcher />
