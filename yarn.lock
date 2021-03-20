@@ -1392,6 +1392,11 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@btsd/aitu-bridge@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@btsd/aitu-bridge/-/aitu-bridge-0.2.1.tgz#5c6d396621d081ef4de7c8e7585b6d3cad0053c0"
+  integrity sha512-BBfxM53fJNWxqgVPdIOCULDCUDmAxeW5usFnPbXs/Mp/qfPf14wQuKgjW2wMjhcFi+RdqSUc2fv/AZZbd4qKrg==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@cnakazawa/watch/-/watch-1.0.3.tgz#099139eaec7ebf07a27c1786a3ff64f39464d2ef"

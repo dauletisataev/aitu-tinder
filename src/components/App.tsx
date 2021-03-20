@@ -4,7 +4,6 @@ import "tailwindcss/tailwind.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { StoreProvider } from "easy-peasy";
 import store from "@src/store";
-import EnterNamePage from "./pages/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./Home";
@@ -15,7 +14,7 @@ import ChatSvg from "@heroicons/solid/chat.svg";
 import UserSvg from "@heroicons/solid/user-circle.svg";
 import { NavLink, Redirect } from "react-router-dom";
 import RegistrationPage from "./pages/RegistrationPage";
-import {ChatPage} from "@pages/Chat";
+import { ChatPage } from "@pages/Chat";
 
 const Switcher: React.FC = () => {
   return (
@@ -43,15 +42,23 @@ const Switcher: React.FC = () => {
 const BottomNavigation: React.FC = () => {
   return (
     <div className="p-2 border-t w-full mt-auto flex justify-between">
-      <div>
-        <FireSvg className="w-10 h-10 text-red-500" />
-      </div>
+      <NavLink
+        to="/tinder"
+        className="text-gray-400"
+        activeClassName="text-red-500"
+      >
+        <FireSvg className="w-10 h-10" />
+      </NavLink>
       <div>
         <HeartSvg className="w-10 h-10 text-gray-400" />
       </div>
-      <div>
-        <ChatSvg className="w-10 h-10 text-gray-400" />
-      </div>
+      <NavLink
+        to="/chat"
+        className="text-gray-400"
+        activeClassName="text-red-500"
+      >
+        <ChatSvg className="w-10 h-10" />
+      </NavLink>
       <div>
         <UserSvg className="w-10 h-10 text-gray-400" />
       </div>
@@ -71,11 +78,11 @@ const App: React.FC = () => {
             <Route path={`/chat`}>
               <ChatPage />
             </Route>
+            <Route exact path={`/registration`}>
+              <RegistrationPage />
+            </Route>
             <div className="h-screen flex flex-col">
               <Switcher />
-              <Route exact path={`/registration`}>
-                <RegistrationPage />
-              </Route>
               <Route path={`/clubhouse`}>
                 <ClubHouse />
               </Route>

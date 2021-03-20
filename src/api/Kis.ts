@@ -18,23 +18,19 @@ export class Api extends HttpClient {
     super(api_domain);
   }
 
-  public login = (body) => {
-    return this.instance.post<IUser>("login", body);
-  };
-
-  public whoAmI = () => {
-    return this.instance.get<IUser>("who_am_i");
+  public register = (body) => {
+    return this.instance.post("sign_up", body);
   };
 
   public topics = () => {
-    return this.instance.get('topics');
-  }
+    return this.instance.get("topics");
+  };
 
   public createTopic = (body) => {
-    return this.instance.post('topics', body);
-  }
+    return this.instance.post("topics", body);
+  };
 
   public tags = () => {
-    return this.instance.get('tags');
-  }
+    return this.instance.get("tags");
+  };
 }

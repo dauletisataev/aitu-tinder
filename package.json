@@ -74,6 +74,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "@btsd/aitu-bridge": "^0.2.1",
     "@material-ui/core": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@types/actioncable": "^5.2.3",

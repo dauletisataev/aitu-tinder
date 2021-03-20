@@ -36,7 +36,7 @@ const TinderCards: React.FC = () => {
         return (
           <TinderCard
             key={`person-${index}`}
-            flickOnSwipe={false}
+            preventSwipe={["up", "down"]}
             className="absolute"
           >
             <div className="rounded-2xl">
