@@ -12,9 +12,10 @@ import FireSvg from "@heroicons/solid/fire.svg";
 import HeartSvg from "@heroicons/solid/heart.svg";
 import ChatSvg from "@heroicons/solid/chat.svg";
 import UserSvg from "@heroicons/solid/user-circle.svg";
-import { NavLink, Redirect } from "react-router-dom";
+import { NavLink, Redirect, Link } from "react-router-dom";
 import RegistrationPage from "./pages/RegistrationPage";
 import { ChatPage } from "@pages/Chat";
+import {ChatsPage} from "@pages/Chats";
 
 const Switcher: React.FC = () => {
   return (
@@ -53,7 +54,7 @@ const BottomNavigation: React.FC = () => {
         <HeartSvg className="w-10 h-10 text-gray-400" />
       </div>
       <NavLink
-        to="/chat"
+        to="/chats"
         className="text-gray-400"
         activeClassName="text-red-500"
       >
@@ -80,6 +81,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path={`/registration`}>
               <RegistrationPage />
+            </Route>
+            <Route path={`/chats`}>
+              <ChatsPage />
             </Route>
             <div className="h-screen flex flex-col">
               <Switcher />
