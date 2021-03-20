@@ -76,7 +76,7 @@ const App: React.FC = () => {
             <Route exact path="/404">
               Not Found
             </Route>
-            <Route path={`/chat`}>
+            <Route path={`/chat/:chatId/:userId`}>
               <ChatPage />
             </Route>
             <Route exact path={`/registration`}>

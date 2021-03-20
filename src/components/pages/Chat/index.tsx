@@ -4,22 +4,10 @@ import BackIcon from "@heroicons/solid/arrow-left.svg";
 import SendIcon from "@heroicons/solid/arrow-circle-right.svg";
 import MenuIcon from "@heroicons/solid/menu.svg";
 import { TextField } from "@material-ui/core";
-import { useCallback, useState } from "react";
-import { NavLink, Redirect } from "react-router-dom";
-
-const mockMessages = [
-  new Message({
-    id: 1,
-    message: "I'm the recipient! (The person you're talking to)",
-    senderName: "Lolita",
-  }),
-  new Message({
-    id: 0,
-    message: "I'm you -- the blue bubble!",
-    senderName: "Nursultan",
-  }),
-  new Message({ id: 0, message: "nice to meet you!", senderName: "Nursultan" }),
-];
+import {useCallback, useEffect, useState} from "react";
+import { NavLink, Redirect, useParams } from "react-router-dom";
+import {Api} from "@src/api/Kis";
+import {createConsumer} from "actioncable";
 
 const mockAvatar =
   "https://image.freepik.com/free-vector/portrait-caucasian-woman-profile-with-long-hair-avatar-young-white-girl_102172-419.jpg";
@@ -34,29 +22,81 @@ const mockPossibleInputs = [
   "Чем интересуешься?",
 ];
 
-const Header = () => {
+const Header = ({name, avatarUrl}) => {
   return (
     <div className="flex items-center shadow-b sticky left-0 right-0 top-0 z-10 bg-white">
-      <NavLink className="p-4" to="/tinder">
+      <NavLink className="p-4" to="/chats">
         <BackIcon className="h-5 w-5 text-black" />
       </NavLink>
-      <img className="rounded-full w-12 h-12 my-2" src={mockAvatar} />
-      <p className="ml-4 font-semibold text-xl">Lolita</p>
+      <img className="rounded-full w-12 h-12 my-2" src={avatarUrl} />
+      <p className="ml-4 font-semibold text-xl">{name}</p>
     </div>
   );
 };
 
 export const ChatPage: React.FC = () => {
-  const [messages, setMessages] = useState(mockMessages);
+  const {chatId, userId} = useParams();
+  const api = new Api();
+
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [showHelpers, setShowHelpers] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
 
-  const onMessageSend = useCallback(() => {
-    setNewMessage("");
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      new Message({ id: 0, message: newMessage }),
-    ]);
+  useEffect(() => {
+    api.userInfo(userId).then(({data}) => {
+      setUserInfo(data);
+    })
+
+    api.messages(chatId).then(({data}) => {
+      setMessages(data
+        .map((res) => new Message({id: res.sender.id === 1 ? 0 : 1, message: res.text}))
+        .reverse())
+    })
+
+    const cable = createConsumer(
+      `wss://aitu-tinder.herokuapp.com/cable?aitu_id=1`,
+    );
+
+    cable.connect();
+
+    cable.subscriptions.create("MessageChannel", {
+      received: (payload) => {
+        console.log("socket received:", payload);
+        const action = payload.message.action;
+        switch (action) {
+          case "new_message":
+            api.messages(chatId).then(({data}) => {
+              setMessages(data
+                .map((res) => new Message({id: res.sender.id === 1 ? 0 : 1, message: res.text}))
+                .reverse())
+            })
+            break;
+          default:
+            console.log(
+              `OrderChanel message: unhandled action ${action}`,
+            );
+        }
+      },
+    });
+
+    return () => {
+      cable.disconnect();
+    }
+  }, [])
+
+  const onMessageSend = useCallback(async () => {
+    setLoading(true);
+    const {status} = await api.sendMessage({chat_id: chatId, text: newMessage});
+    setLoading(false);
+    if(status === 200 || status === 201) {
+      setNewMessage("");
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        new Message({id: 0, message: newMessage}),
+      ]);
+    }
   }, [newMessage]);
 
   const onEnterPress = useCallback(
@@ -70,7 +110,7 @@ export const ChatPage: React.FC = () => {
 
   return (
     <div>
-      <Header />
+      <Header name={userInfo.name || ''} avatarUrl={userInfo.avatar_url || mockAvatar}  />
       <div className="px-4 pb-12">
         <ChatFeed messages={messages} showSenderName />
       </div>
@@ -94,7 +134,7 @@ export const ChatPage: React.FC = () => {
           <button
             className="p-2"
             onClick={onMessageSend}
-            disabled={newMessage.length === 0}
+            disabled={newMessage.length === 0 || loading}
           >
             <SendIcon className="w-7 h-7 text-blue-600" />
           </button>
