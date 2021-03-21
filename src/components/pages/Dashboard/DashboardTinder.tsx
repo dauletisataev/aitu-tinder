@@ -13,6 +13,10 @@ const TinderCards: React.FC<{ users: any[] }> = ({ users }) => {
   const id = useStoreState((store) => store.id);
   const itemsRef = React.useRef<Array<HTMLDivElement | null>>([]);
 
+  const stateRef = React.useRef<any>();
+
+  stateRef.current = currentUsers;
+
   React.useEffect(() => {
     itemsRef.current = itemsRef.current.slice(0, currentUsers.length);
   }, [currentUsers]);
@@ -22,7 +26,7 @@ const TinderCards: React.FC<{ users: any[] }> = ({ users }) => {
       {currentUsers.map((person, index) => {
         return (
           <TinderCard
-            key={`person-${index}`}
+            key={`person-${person.id}`}
             preventSwipe={["up", "down"]}
             className="absolute top-10"
             ref={(el) => (itemsRef.current[index] = el)}
@@ -31,14 +35,15 @@ const TinderCards: React.FC<{ users: any[] }> = ({ users }) => {
               api.likeUser(person.id, {
                 like_type: direction == "right" ? "like" : "dislike",
               });
-              let newusers =
-                currentUsers.length == 1
-                  ? []
-                  : currentUsers.splice(0, currentUsers.length - 1);
-              setUsers(newusers);
+              console.log("current users", stateRef.current);
+              const new_users = stateRef.current.filter(
+                (_, index) => index != stateRef.current.length - 1,
+              );
+              console.log("new_users", new_users);
+              setUsers(new_users);
             }}
           >
-            <div className="rounded-2xl">
+            <div className="rounded-2xl bg-gray-50">
               <img
                 src={
                   person.avatar_url ||
@@ -103,6 +108,7 @@ const DashboardTinder: React.FunctionComponent<IDashboardTinderProps> = () => {
           hideProgressBar: true,
           type: "warning",
         });
+        window.location.reload();
       });
   }, []);
   return <div className="flex-1">{users && <TinderCards users={users} />}</div>;
