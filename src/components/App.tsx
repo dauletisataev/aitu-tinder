@@ -27,10 +27,10 @@ const App: React.FC = () => {
       api
         .who_am_i()
         .then(() => {
-          toast("succes id = " + hashString(data.id), {
-            hideProgressBar: true,
-            type: "success",
-          });
+          // toast("succes id = " + hashString(data.id), {
+          //   hideProgressBar: true,
+          //   type: "success",
+          // });
           setIsRegistred(true);
         })
         .finally(() => {
@@ -41,7 +41,7 @@ const App: React.FC = () => {
 
   // for local
   // React.useEffect(() => {
-  //   const api = new Api("1632222011");
+  //   const api = new Api("1");
   //   api
   //     .who_am_i()
   //     .then(() => {

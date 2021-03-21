@@ -31,7 +31,11 @@ const TinderCards: React.FC<{ users: any[] }> = ({ users }) => {
               api.likeUser(person.id, {
                 like_type: direction == "right" ? "like" : "dislike",
               });
-              setUsers(currentUsers.slice(1));
+              let newusers =
+                currentUsers.length == 1
+                  ? []
+                  : currentUsers.splice(0, currentUsers.length - 1);
+              setUsers(newusers);
             }}
           >
             <div className="rounded-2xl">

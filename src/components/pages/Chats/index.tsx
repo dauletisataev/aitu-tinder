@@ -29,18 +29,22 @@ const Header = () => {
 export const ChatsPage: React.FC = () => {
   const id = useStoreState((store) => store.id);
 
-  const [loading, setLoading] = React.useState(true);
+  const [matchsloading, setMatchsLoading] = React.useState(true);
+  const [chatsloading, setChatsLoading] = React.useState(true);
   const [chats, setChats] = useState([]);
   const [matches, setMatches] = useState([]);
   const router = useHistory();
 
   useEffect(() => {
     const api = new Api(id);
-    api.chats().then(({ data }) => setChats(data));
+    api
+      .chats()
+      .then(({ data }) => setChats(data))
+      .finally(() => setChatsLoading(false));
     api
       .matches()
       .then(({ data }) => setMatches(data))
-      .finally(() => setLoading(false));
+      .finally(() => setMatchsLoading(false));
     const cable = createConsumer(
       `wss://aitu-tinder.herokuapp.com/cable?aitu_id=${id}`,
     );
@@ -85,26 +89,30 @@ export const ChatsPage: React.FC = () => {
   };
 
   return (
-    <LoadingContainer loading={loading}>
-      <div>
-        <Header />
-        {matches.length > 0 && (
-          <div className="mt-4">
-            <p className="text-md ml-4">Недавние пары</p>
-            <div className="mt-3 overflow-x-scroll flex ">
-              {matches.map((match, index) => (
-                <img
-                  onClick={() => onMatchClick(match.id)}
-                  key={index}
-                  src={match.avatar_url || mockAvatar}
-                  className="ml-2 rounded-full w-14 h-14 mr-1"
-                />
-              ))}
+    <div>
+      <LoadingContainer loading={matchsloading}>
+        <>
+          <Header />
+          {matches.length > 0 && (
+            <div className="mt-4">
+              <p className="text-md ml-4">Недавние пары</p>
+              <div className="mt-3 overflow-x-scroll flex ">
+                {matches.map((match, index) => (
+                  <img
+                    onClick={() => onMatchClick(match.id)}
+                    key={index}
+                    src={match.avatar_url || mockAvatar}
+                    className="ml-2 rounded-full w-14 h-14 mr-1"
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        <div className="mt-4">
-          <p className="text-xl ml-4">Сообщения</p>
+          )}
+        </>
+      </LoadingContainer>
+      <div className="mt-4">
+        <p className="text-xl ml-4">Сообщения</p>
+        <LoadingContainer loading={chatsloading}>
           <div className="mt-3">
             {chats.map((chat) => (
               <Link key={chat.id} to={`/chat/${chat.id}/${chat.user.id}`}>
@@ -123,8 +131,8 @@ export const ChatsPage: React.FC = () => {
               </Link>
             ))}
           </div>
-        </div>
+        </LoadingContainer>
       </div>
-    </LoadingContainer>
+    </div>
   );
 };

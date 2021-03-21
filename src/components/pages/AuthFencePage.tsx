@@ -21,6 +21,7 @@ import DashboardTinder from "./Dashboard/DashboardTinder";
 import { ChatsPage } from "./Chats";
 import { toast } from "react-toastify";
 import AudioRoomPage from "./AudioRoomPage";
+import LocationsPage from "./LocationsPage";
 
 const Switcher: React.FC = () => {
   return (
@@ -56,19 +57,20 @@ const BottomNavigation: React.FC = () => {
         <FireSvg className="w-10 h-10" />
       </NavLink>
       <NavLink
-        to="/chats"
-        className="text-gray-400"
-        activeClassName="text-indigo-500"
-      >
-        <ChatSvg className="w-10 h-10" />
-      </NavLink>
-      <NavLink
         to="/locations"
         className="text-gray-400"
         activeClassName="text-indigo-500"
       >
         <LocationSvg className="w-10 h-10" />
       </NavLink>
+      <NavLink
+        to="/chats"
+        className="text-gray-400"
+        activeClassName="text-indigo-500"
+      >
+        <ChatSvg className="w-10 h-10" />
+      </NavLink>
+
       <div
         onClick={() =>
           toast("Находится в разработке", {
@@ -114,8 +116,8 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
     });
 
     // for local
-    // const api = new Api("1632222011");
-    // setId("1632222011");
+    // const api = new Api("1");
+    // setId("1");
     // api
     //   .userspoll()
     //   .then(({ data }) => {
@@ -140,6 +142,9 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
         <Route path={`/chats`}>
           <ChatsPage />
         </Route>
+        <Route path={`/locations`}>
+          <LocationsPage />
+        </Route>
         <Route exact path={`/clubhouse`}>
           <Switcher />
           <ClubHouse />
@@ -153,6 +158,7 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
           <AudioRoomPage />
         </Route>
         <Route exact path={`/`}>
+          <Switcher />
           <DashboardTinder />
         </Route>
         <BottomNavigation />
