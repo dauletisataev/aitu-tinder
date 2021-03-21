@@ -12,6 +12,7 @@ import FireSvg from "@heroicons/solid/fire.svg";
 import LocationSvg from "@heroicons/solid/location-marker.svg";
 import ChatSvg from "@heroicons/solid/chat.svg";
 import UserSvg from "@heroicons/solid/user-circle.svg";
+import HeartSvg from "@heroicons/solid/heart.svg";
 import { Api } from "@src/api/Kis";
 import aituBridge from "@btsd/aitu-bridge";
 import { hashString, setKisToken } from "@src/utils/utils";
@@ -23,6 +24,7 @@ import { toast } from "react-toastify";
 import AudioRoomPage from "./AudioRoomPage";
 import LocationsPage from "./LocationsPage";
 import ProfilePage from "@pages/ProfilePage";
+import LikesPage from "./LikesPage";
 
 const Switcher: React.FC = () => {
   return (
@@ -58,6 +60,13 @@ const BottomNavigation: React.FC = () => {
         <FireSvg className="w-10 h-10" />
       </NavLink>
       <NavLink
+        to="/likes"
+        className="text-gray-400"
+        activeClassName="text-indigo-500"
+      >
+        <HeartSvg className="w-10 h-10" />
+      </NavLink>
+      <NavLink
         to="/locations"
         className="text-gray-400"
         activeClassName="text-indigo-500"
@@ -79,7 +88,6 @@ const BottomNavigation: React.FC = () => {
       >
         <UserSvg className="w-10 h-10" />
       </NavLink>
-
     </div>
   );
 };
@@ -91,46 +99,20 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
   const history = useHistory();
 
   const [loading, setLoading] = React.useState(true);
-  const [userspoll, setUserspoll] = React.useState(null);
   const setId = useStoreActions((store) => store.setId);
 
   React.useEffect(() => {
-    // for aitu
-    aituBridge.getMe().then((data) => {
-      const api = new Api(hashString(data.id));
-      setId(`${hashString(data.id)}`);
-      api
-        .userspoll()
-        .then(({ data }) => {
-          setUserspoll(data);
-        })
-        .catch(() => {
-          toast(".userspoll() fail", {
-            hideProgressBar: true,
-            type: "warning",
-          });
-          history.push("/registration");
-        })
-        .finally(() => setLoading(false));
-    });
+    const local = true;
 
-  //   // for local
-  //   const api = new Api("1632222011");
-  //   setId("1632222011");
-  //   api
-  //     .userspoll()
-  //     .then(({ data }) => {
-  //       // setUserspoll(data);
-  //     })
-  //     .catch(() => {
-  //       toast(".userspoll() fail", {
-  //         hideProgressBar: true,
-  //         type: "warning",
-  //       });
-  //       history.push("/registration");
-  //     })
-  //     .finally(() => setLoading(false));
-  // }, []);
+    if (local) {
+      setId("6");
+      setLoading(false);
+    } else
+      aituBridge.getMe().then((data) => {
+        setId(`${hashString(data.id)}`);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <LoadingContainer loading={loading}>
@@ -144,8 +126,11 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
         <Route path={`/locations`}>
           <LocationsPage />
         </Route>
-        <Route path={'/profile'}>
+        <Route path={"/profile"}>
           <ProfilePage />
+        </Route>
+        <Route path={`/likes`}>
+          <LikesPage />
         </Route>
         <Route exact path={`/clubhouse`}>
           <Switcher />

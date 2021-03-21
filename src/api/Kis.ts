@@ -72,4 +72,16 @@ export class Api extends HttpClient {
   public getRandomUser = () => {
     return this.instance.get("random_user");
   };
+
+  public iLikedUsers = () => {
+    return this.instance.get("liked_users");
+  };
+
+  public usersLikedMe = () => {
+    return this.instance.get("liked_by_users");
+  };
+
+  public removeMyLike = (id) => {
+    return this.instance.delete(`hacknu_users/${id}`);
+  };
 }

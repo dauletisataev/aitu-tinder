@@ -48,6 +48,10 @@ export const ChatPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
 
+  const messaagesRef = React.useRef<any>();
+
+  messaagesRef.current = messages;
+
   useEffect(() => {
     console.log(params);
     const api = new Api(id);
@@ -81,21 +85,17 @@ export const ChatPage: React.FC = () => {
         const action = payload.message.action;
         switch (action) {
           case "new_message":
-            // const messageParsed = JSON.parse(
-            //   JSON.parse(payload.message.order_item),
-            // );
-            api.messages(chatId).then(({ data }) => {
-              const new_messages = data
-                .map(
-                  (res) =>
-                    new Message({
-                      id: res.sender.id != id ? 1 : 0,
-                      message: res.text,
-                    }),
-                )
-                .reverse();
-              setMessages(new_messages);
-            });
+            const messageParsed = JSON.parse(
+              JSON.parse(payload.message.order_item),
+            );
+
+            setMessages([
+              ...messaagesRef.current,
+              new Message({
+                id: 1,
+                message: messageParsed.text,
+              }),
+            ]);
             break;
           default:
             console.log(`OrderChanel message: unhandled action ${action}`);
@@ -110,12 +110,10 @@ export const ChatPage: React.FC = () => {
 
   const onMessageSend = useCallback(async () => {
     const api = new Api(id);
-    setLoading(true);
     const { status } = await api.sendMessage({
       chat_id: chatId,
       text: newMessage,
     });
-    setLoading(false);
     if (status === 200 || status === 201) {
       setNewMessage("");
       setMessages((prevMessages) => [
