@@ -22,6 +22,7 @@ import { ChatsPage } from "./Chats";
 import { toast } from "react-toastify";
 import AudioRoomPage from "./AudioRoomPage";
 import LocationsPage from "./LocationsPage";
+import ProfilePage from "@pages/ProfilePage";
 
 const Switcher: React.FC = () => {
   return (
@@ -71,16 +72,14 @@ const BottomNavigation: React.FC = () => {
         <ChatSvg className="w-10 h-10" />
       </NavLink>
 
-      <div
-        onClick={() =>
-          toast("Находится в разработке", {
-            hideProgressBar: true,
-            type: "info",
-          })
-        }
+      <NavLink
+        to="/profile"
+        className="text-gray-400"
+        activeClassName="text-indigo-500"
       >
-        <UserSvg className="w-10 h-10 text-gray-400" />
-      </div>
+        <UserSvg className="w-10 h-10" />
+      </NavLink>
+
     </div>
   );
 };
@@ -115,23 +114,23 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
         .finally(() => setLoading(false));
     });
 
-    // for local
-    // const api = new Api("1");
-    // setId("1");
-    // api
-    //   .userspoll()
-    //   .then(({ data }) => {
-    //     // setUserspoll(data);
-    //   })
-    //   .catch(() => {
-    //     toast(".userspoll() fail", {
-    //       hideProgressBar: true,
-    //       type: "warning",
-    //     });
-    //     history.push("/registration");
-    //   })
-    //   .finally(() => setLoading(false));
-  }, []);
+  //   // for local
+  //   const api = new Api("1632222011");
+  //   setId("1632222011");
+  //   api
+  //     .userspoll()
+  //     .then(({ data }) => {
+  //       // setUserspoll(data);
+  //     })
+  //     .catch(() => {
+  //       toast(".userspoll() fail", {
+  //         hideProgressBar: true,
+  //         type: "warning",
+  //       });
+  //       history.push("/registration");
+  //     })
+  //     .finally(() => setLoading(false));
+  // }, []);
 
   return (
     <LoadingContainer loading={loading}>
@@ -144,6 +143,9 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
         </Route>
         <Route path={`/locations`}>
           <LocationsPage />
+        </Route>
+        <Route path={'/profile'}>
+          <ProfilePage />
         </Route>
         <Route exact path={`/clubhouse`}>
           <Switcher />

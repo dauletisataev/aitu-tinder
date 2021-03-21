@@ -59,6 +59,9 @@ export const ChatsPage: React.FC = () => {
           case "new_message":
             api.chats().then(({ data }) => setChats(data));
             break;
+          case "new_chat":
+            api.chats().then(({ data }) => setChats(data));
+            break;
           default:
             console.log(`OrderChanel message: unhandled action ${action}`);
         }

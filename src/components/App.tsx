@@ -39,9 +39,9 @@ const App: React.FC = () => {
     });
   }, []);
 
-  // for local
+  // // for local
   // React.useEffect(() => {
-  //   const api = new Api("1");
+  //   const api = new Api("1632222011");
   //   api
   //     .who_am_i()
   //     .then(() => {
