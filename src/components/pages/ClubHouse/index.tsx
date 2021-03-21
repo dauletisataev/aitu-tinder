@@ -7,6 +7,7 @@ import { Modal, ModalProps, TextField } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import Button from "@atoms/button";
 import { useStoreState } from "@src/hooks";
+import LoadingContainer from "@src/components/atoms/LoadingContainer";
 
 interface IDashboardTinderProps {}
 
@@ -98,12 +99,19 @@ const AddNewModal: React.FC<
 
 const ClubHouse: React.FunctionComponent<IDashboardTinderProps> = (props) => {
   const [topics, setTopics] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const id = useStoreState((store) => store.id);
 
   const updateTopics = useCallback(() => {
     const api = new Api(id);
-    api.topics().then(({ data }) => setTopics(data));
+    setLoading(true);
+    api
+      .topics()
+      .then(({ data }) => setTopics(data))
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -116,15 +124,21 @@ const ClubHouse: React.FunctionComponent<IDashboardTinderProps> = (props) => {
   }, []);
 
   return (
-    <div className="p-2">
-      {topics.map(({ name, tags, people_count, id }, index) => (
-        <div className="mb-4" key={id}>
-          <ClubhouseCard title={name} tags={tags} peopleCount={people_count} />
-        </div>
-      ))}
-      <AddButton onClick={() => setOpenModal(true)} />
-      <AddNewModal open={openModal} onClose={onModalClose} />
-    </div>
+    <LoadingContainer loading={loading}>
+      <div className="p-2">
+        {topics.map(({ name, tags, people_count, id }, index) => (
+          <div className="mb-4" key={id}>
+            <ClubhouseCard
+              title={name}
+              tags={tags}
+              peopleCount={people_count}
+            />
+          </div>
+        ))}
+        <AddButton onClick={() => setOpenModal(true)} />
+        <AddNewModal open={openModal} onClose={onModalClose} />
+      </div>
+    </LoadingContainer>
   );
 };
 

@@ -26,7 +26,7 @@ const LoadingSpinner: React.FunctionComponent<ILoadingSpinnerProps> = (
   };
 
   return (
-    <div className="h-full w-full flex justify-center items-center">
+    <div className="flex justify-center items-center">
       <div
         className={cn(
           "d pointer-events-none border-solid border-transparent border-t-current animate-spin rounded-full",

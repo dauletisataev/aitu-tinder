@@ -13,11 +13,13 @@ const AudioRoomPage: React.FunctionComponent<IAudioRoomPageProps> = (props) => {
   const router = useHistory();
 
   React.useEffect(() => {
-    const api = new Api(id);
-    api.getRandomUser().then(({ data }) => {
-      setUser(data);
-      setLoading(false);
-    });
+    setTimeout(() => {
+      const api = new Api(id);
+      api.getRandomUser().then(({ data }) => {
+        setUser(data);
+        setLoading(false);
+      });
+    }, 2500);
   }, []);
 
   return (

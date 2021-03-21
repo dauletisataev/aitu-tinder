@@ -102,10 +102,10 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
   const setId = useStoreActions((store) => store.setId);
 
   React.useEffect(() => {
-    const local = true;
+    const local = false;
 
     if (local) {
-      setId("6");
+      setId("1632222011");
       setLoading(false);
     } else
       aituBridge.getMe().then((data) => {

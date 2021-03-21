@@ -10,6 +10,9 @@ import { Api } from "@src/api/Kis";
 import { createConsumer } from "actioncable";
 import { useStoreState } from "@src/hooks";
 import LoadingContainer from "@src/components/atoms/LoadingContainer";
+import LoadingSpinner from "@src/components/atoms/LoadingSpinner";
+import cn from "classnames";
+import StarSvg from "@heroicons/solid/star.svg";
 
 const mockAvatar =
   "https://image.freepik.com/free-vector/portrait-caucasian-woman-profile-with-long-hair-avatar-young-white-girl_102172-419.jpg";
@@ -17,12 +20,61 @@ const mockAvatar =
 const mockPossibleInputs = [
   "Как дела?",
   "Чем занята?",
-  "Чем увлекаешься?",
   "Чем интересуешься?",
   "Чем занята?",
   "Чем увлекаешься?",
   "Чем интересуешься?",
 ];
+
+const locations = [
+  {
+    name: "Кок тобе",
+    link: "flirt.aitu.io/locations/12",
+    rateing: "4,2",
+    imageUrl: "https://i.ytimg.com/vi/uwnVPWXbwPw/maxresdefault.jpg",
+  },
+  {
+    name: "Кок тобе",
+    link: "flirt.aitu.io/locations/12",
+    rateing: "4,4",
+    imageUrl: "https://ticketon.kz/files/images/medeu-675.jpg",
+  },
+  {
+    name: "Крапива боулинг",
+    link: "flirt.aitu.io/locations/12",
+    rateing: "3,9",
+    imageUrl: "https://sxodim.com/uploads/almaty/2018/06/image1-1-745x496.jpeg",
+  },
+];
+
+const Switcher: React.FC<{ tab: string; settab: any }> = ({ tab, settab }) => {
+  return (
+    <div className="flex justify-center items-center mt-2 w-full mx-10">
+      <div className="shadow flex">
+        <div
+          className={cn("rounded-l p-1 w-24 text-center", {
+            "bg-indigo-500 text-white": tab == "messages",
+          })}
+          onClick={() => {
+            settab("messages");
+          }}
+        >
+          заготовки
+        </div>
+        <div
+          className={cn("rounded-r p-1 border-l w-24 text-center", {
+            "bg-indigo-500 text-white": tab == "locations",
+          })}
+          onClick={() => {
+            settab("locations");
+          }}
+        >
+          Локации
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Header = ({ name, avatarUrl }) => {
   return (
@@ -47,7 +99,7 @@ export const ChatPage: React.FC = () => {
   const [showHelpers, setShowHelpers] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
-
+  const [messageIsSending, setMessageIsSending] = useState(false);
   const messaagesRef = React.useRef<any>();
 
   messaagesRef.current = messages;
@@ -109,6 +161,7 @@ export const ChatPage: React.FC = () => {
   }, []);
 
   const onMessageSend = useCallback(async () => {
+    setMessageIsSending(true);
     const api = new Api(id);
     const { status } = await api.sendMessage({
       chat_id: chatId,
@@ -121,6 +174,7 @@ export const ChatPage: React.FC = () => {
         new Message({ id: 0, message: newMessage }),
       ]);
     }
+    setMessageIsSending(false);
   }, [newMessage]);
 
   const onEnterPress = useCallback(
@@ -131,6 +185,8 @@ export const ChatPage: React.FC = () => {
     },
     [onMessageSend, newMessage],
   );
+
+  let [tab, settab] = React.useState("messages");
 
   return (
     <LoadingContainer loading={loading}>
@@ -161,27 +217,58 @@ export const ChatPage: React.FC = () => {
               fullWidth
               onKeyDown={onEnterPress}
             />
-            <button
-              className="p-2"
-              onClick={onMessageSend}
-              disabled={newMessage.length === 0 || loading}
-            >
-              <SendIcon className="w-7 h-7 text-blue-600" />
-            </button>
+            {messageIsSending ? (
+              <LoadingSpinner />
+            ) : (
+              <button
+                className="p-2"
+                onClick={onMessageSend}
+                disabled={newMessage.length === 0 || loading}
+              >
+                <SendIcon className="w-7 h-7 text-blue-600" />
+              </button>
+            )}
           </div>
           {showHelpers && (
             <div className="flex items-center justify-center flex-wrap max-h-40 overflow-y-scroll">
-              {mockPossibleInputs.map((input, index) => (
-                <div className="w-2/4 px-4 my-2 h-full">
-                  <button
-                    key={index}
-                    className="rounded-md bg-gray-200 w-full h-full py-2"
-                    onClick={() => setNewMessage(input)}
-                  >
-                    {input}
-                  </button>
+              <Switcher tab={tab} settab={settab} />
+              {tab == "messages" ? (
+                mockPossibleInputs.map((input, index) => (
+                  <div className="w-2/4 px-4 my-2 h-full">
+                    <button
+                      key={index}
+                      className="rounded-md bg-gray-200 w-full h-full py-2"
+                      onClick={() => setNewMessage(input)}
+                    >
+                      {input}
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="grid grid-cols-2 gap-1 bg-gray-50 p-2">
+                  {locations.map((location, index) => (
+                    <div
+                      key={`locations-${index}`}
+                      className="rounded-md shadow-lg flex flex-col h-48"
+                      onClick={() => setNewMessage(location.link)}
+                    >
+                      <img
+                        src={location.imageUrl}
+                        className="w-full object-cover h-32 rounded-t-md"
+                      />
+                      <div className="text-lg font-bold mx-2">
+                        {location.name}
+                      </div>
+                      <div className="flex space-x-1 items-center mx-2">
+                        <StarSvg className="w-4 h-4 text-gray-500" />
+                        <div className="text-base font-medium">
+                          {location.rateing}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           )}
         </div>

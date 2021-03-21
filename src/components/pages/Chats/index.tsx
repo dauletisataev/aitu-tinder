@@ -73,15 +73,6 @@ export const ChatsPage: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const newMatches = matches.filter(
-      (match) => !chats.map((chat) => chat.user.id).includes(match.id),
-    );
-    setMatches((prevMatches) =>
-      prevMatches.length === newMatches.length ? prevMatches : newMatches,
-    );
-  }, [matches, chats]);
-
   const onMatchClick = (userId) => {
     const api = new Api(id);
     api.createChats({ user_id: userId }).then(({ data, status }) => {

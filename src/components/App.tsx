@@ -22,10 +22,10 @@ const App: React.FC = () => {
 
   // for aitu
   React.useEffect(() => {
-    const local = true;
+    const local = false;
 
     if (local) {
-      const api = new Api("6");
+      const api = new Api("1632222011");
       api
         .who_am_i()
         .then(() => {
