@@ -4,7 +4,7 @@ import "tailwindcss/tailwind.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { StoreProvider } from "easy-peasy";
 import store from "@src/store";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RegistrationPage from "./pages/RegistrationPage";
 import { ChatPage } from "@pages/Chat";
@@ -17,22 +17,43 @@ import { useStoreActions } from "@src/hooks";
 
 const App: React.FC = () => {
   // const [loading, setLoading] = React.useState(true);
-  const [loading, setLoading] = React.useState(false);
-  const [isRegisted, setIsRegistred] = React.useState(true);
+  const [loading, setLoading] = React.useState(true);
+  const [isRegisted, setIsRegistred] = React.useState(false);
 
+  // for aitu
+  // React.useEffect(() => {
+  //   aituBridge.getMe().then((data) => {
+  //     const api = new Api(hashString(data.id));
+  //     api
+  //       .who_am_i()
+  //       .then(() => {
+  //         toast("succes id = " + hashString(data.id), {
+  //           hideProgressBar: true,
+  //           type: "success",
+  //         });
+  //         setIsRegistred(true);
+  //       })
+  //       .finally(() => {
+  //         setLoading(false);
+  //       });
+  //   });
+  // }, []);
+
+  // for local
   React.useEffect(() => {
-    /*aituBridge.getMe().then((data) => {
-      const api = new Api(hashString(data.id));
-      api
-        .who_am_i()
-        .then(() => {
-          alert("succes id = " + hashString(data.id));
-          setIsRegistred(true);
-        })
-        .finally(() => {
-          setLoading(false);
+    const api = new Api("1632222011");
+    api
+      .who_am_i()
+      .then(() => {
+        toast("succes id = " + 1632222011, {
+          hideProgressBar: true,
+          type: "success",
         });
-    });*/
+        setIsRegistred(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (

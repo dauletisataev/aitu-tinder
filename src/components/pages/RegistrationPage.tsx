@@ -13,6 +13,7 @@ import aituBridge from "@btsd/aitu-bridge";
 import { useHistory } from "react-router-dom";
 import { hashString, setKisToken } from "@src/utils/utils";
 import { useStoreActions, useStoreState } from "@src/hooks";
+import { firebaseapp } from "@src/utils/firebase";
 
 interface IRegistrationPageProps {}
 
@@ -36,6 +37,15 @@ const RegistrationPage: React.FunctionComponent<IRegistrationPageProps> = (
 
   const setId = useStoreActions((store) => store.setId);
   const id = useStoreState((store) => store.id);
+
+  const onUploadFile = (e) => {
+    const file = e.target.files[0];
+    const storageRef = firebaseapp.storage().ref();
+    const fileRef = storageRef.child(file.name);
+    fileRef.put(file).then(() => {
+      fileRef.getDownloadURL().then(setAvatar);
+    });
+  };
 
   React.useEffect(() => {
     const api = new Api("");
@@ -151,6 +161,16 @@ const RegistrationPage: React.FunctionComponent<IRegistrationPageProps> = (
                 onChange={(e) => setCity(e.target.value)}
                 //   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
+              <div className="mt-6">
+                <label className="block text-sm leading-5 font-medium text-gray-700 mb-2">
+                  Фото
+                </label>
+                <input
+                  type="file"
+                  onChange={onUploadFile}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                />
+              </div>
               <div>
                 <button
                   type="submit"

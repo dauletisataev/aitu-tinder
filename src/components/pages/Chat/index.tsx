@@ -57,21 +57,20 @@ export const ChatPage: React.FC = () => {
     });
 
     api.messages(chatId).then(({ data }) => {
-      setMessages(
-        data
-          .map(
-            (res) =>
-              new Message({
-                id: res.sender.id === 1 ? 0 : 1,
-                message: res.text,
-              }),
-          )
-          .reverse(),
-      );
+      const new_messages = data
+        .map(
+          (res) =>
+            new Message({
+              id: res.sender.id != id ? 1 : 0,
+              message: res.text,
+            }),
+        )
+        .reverse();
+      setMessages(new_messages);
     });
 
     const cable = createConsumer(
-      `wss://aitu-tinder.herokuapp.com/cable?aitu_id=1`,
+      `wss://aitu-tinder.herokuapp.com/cable?aitu_id=${id}`,
     );
 
     cable.connect();
@@ -82,18 +81,20 @@ export const ChatPage: React.FC = () => {
         const action = payload.message.action;
         switch (action) {
           case "new_message":
+            // const messageParsed = JSON.parse(
+            //   JSON.parse(payload.message.order_item),
+            // );
             api.messages(chatId).then(({ data }) => {
-              setMessages(
-                data
-                  .map(
-                    (res) =>
-                      new Message({
-                        id: res.sender.id === 1 ? 0 : 1,
-                        message: res.text,
-                      }),
-                  )
-                  .reverse(),
-              );
+              const new_messages = data
+                .map(
+                  (res) =>
+                    new Message({
+                      id: res.sender.id != id ? 1 : 0,
+                      message: res.text,
+                    }),
+                )
+                .reverse();
+              setMessages(new_messages);
             });
             break;
           default:

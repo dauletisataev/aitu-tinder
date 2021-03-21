@@ -19,6 +19,7 @@ import LoadingContainer from "../atoms/LoadingContainer";
 import { useStoreActions, useStoreState } from "@src/hooks";
 import DashboardTinder from "./Dashboard/DashboardTinder";
 import { ChatsPage } from "./Chats";
+import { toast } from "react-toastify";
 
 const Switcher: React.FC = () => {
   return (
@@ -53,9 +54,6 @@ const BottomNavigation: React.FC = () => {
       >
         <FireSvg className="w-10 h-10" />
       </NavLink>
-      <div>
-        <HeartSvg className="w-10 h-10 text-gray-400" />
-      </div>
       <NavLink
         to="/chats"
         className="text-gray-400"
@@ -63,7 +61,14 @@ const BottomNavigation: React.FC = () => {
       >
         <ChatSvg className="w-10 h-10" />
       </NavLink>
-      <div>
+      <div
+        onClick={() =>
+          toast("Находится в разработке", {
+            hideProgressBar: true,
+            type: "info",
+          })
+        }
+      >
         <UserSvg className="w-10 h-10 text-gray-400" />
       </div>
     </div>
@@ -81,30 +86,38 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
   const setId = useStoreActions((store) => store.setId);
 
   React.useEffect(() => {
-    setId("1");
+    // for aitu
     // aituBridge.getMe().then((data) => {
     //   const api = new Api(hashString(data.id));
-    //   setId(`${hashString(data.id)}`)
+    //   setId(`${hashString(data.id)}`);
     //   api
     //     .userspoll()
     //     .then(({ data }) => {
     //       setUserspoll(data);
     //     })
     //     .catch(() => {
-    //       alert(".userspoll() fail");
+    //       toast(".userspoll() fail", {
+    //         hideProgressBar: true,
+    //         type: "warning",
+    //       });
     //       history.push("/registration");
     //     })
     //     .finally(() => setLoading(false));
     // });
 
-    const api = new Api("1");
+    // for local
+    const api = new Api("1632222011");
+    setId("1632222011");
     api
       .userspoll()
       .then(({ data }) => {
-        setUserspoll(data);
+        // setUserspoll(data);
       })
       .catch(() => {
-        alert(".userspoll() fail");
+        toast(".userspoll() fail", {
+          hideProgressBar: true,
+          type: "warning",
+        });
         history.push("/registration");
       })
       .finally(() => setLoading(false));
@@ -125,10 +138,10 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
         </Route>
         <Route exact path={`/tinder`}>
           <Switcher />
-          {userspoll && <DashboardTinder users={userspoll} />}
+          <DashboardTinder />
         </Route>
         <Route exact path={`/`}>
-          {userspoll && <DashboardTinder users={userspoll} />}
+          <DashboardTinder />
         </Route>
         <BottomNavigation />
       </div>
