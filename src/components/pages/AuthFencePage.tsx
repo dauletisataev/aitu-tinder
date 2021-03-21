@@ -9,7 +9,7 @@ import {
 import { ChatPage } from "./Chat";
 import ClubHouse from "@pages/ClubHouse";
 import FireSvg from "@heroicons/solid/fire.svg";
-import HeartSvg from "@heroicons/solid/heart.svg";
+import LocationSvg from "@heroicons/solid/location-marker.svg";
 import ChatSvg from "@heroicons/solid/chat.svg";
 import UserSvg from "@heroicons/solid/user-circle.svg";
 import { Api } from "@src/api/Kis";
@@ -20,6 +20,7 @@ import { useStoreActions, useStoreState } from "@src/hooks";
 import DashboardTinder from "./Dashboard/DashboardTinder";
 import { ChatsPage } from "./Chats";
 import { toast } from "react-toastify";
+import AudioRoomPage from "./AudioRoomPage";
 
 const Switcher: React.FC = () => {
   return (
@@ -27,17 +28,17 @@ const Switcher: React.FC = () => {
       <div className="shadow flex">
         <NavLink
           to="/tinder"
-          activeClassName="bg-red-500 text-white"
-          className="rounded-l p-2 w-30 text-center w-24"
+          activeClassName="bg-indigo-500 text-white"
+          className="rounded-l p-2 w-32 text-center"
         >
-          Tinder
+          Знакомства
         </NavLink>
         <NavLink
           to="/clubhouse"
-          activeClassName="bg-red-500 text-white"
-          className="rounded-r p-2 border-l w-30 text-center w-24"
+          activeClassName="bg-indigo-500 text-white"
+          className="rounded-r p-2 border-l w-32 text-center"
         >
-          Clubhouse
+          Общение
         </NavLink>
       </div>
     </div>
@@ -50,16 +51,23 @@ const BottomNavigation: React.FC = () => {
       <NavLink
         to="/tinder"
         className="text-gray-400"
-        activeClassName="text-red-500"
+        activeClassName="text-indigo-500"
       >
         <FireSvg className="w-10 h-10" />
       </NavLink>
       <NavLink
         to="/chats"
         className="text-gray-400"
-        activeClassName="text-red-500"
+        activeClassName="text-indigo-500"
       >
         <ChatSvg className="w-10 h-10" />
+      </NavLink>
+      <NavLink
+        to="/locations"
+        className="text-gray-400"
+        activeClassName="text-indigo-500"
+      >
+        <LocationSvg className="w-10 h-10" />
       </NavLink>
       <div
         onClick={() =>
@@ -87,40 +95,40 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
 
   React.useEffect(() => {
     // for aitu
-    // aituBridge.getMe().then((data) => {
-    //   const api = new Api(hashString(data.id));
-    //   setId(`${hashString(data.id)}`);
-    //   api
-    //     .userspoll()
-    //     .then(({ data }) => {
-    //       setUserspoll(data);
-    //     })
-    //     .catch(() => {
-    //       toast(".userspoll() fail", {
-    //         hideProgressBar: true,
-    //         type: "warning",
-    //       });
-    //       history.push("/registration");
-    //     })
-    //     .finally(() => setLoading(false));
-    // });
+    aituBridge.getMe().then((data) => {
+      const api = new Api(hashString(data.id));
+      setId(`${hashString(data.id)}`);
+      api
+        .userspoll()
+        .then(({ data }) => {
+          setUserspoll(data);
+        })
+        .catch(() => {
+          toast(".userspoll() fail", {
+            hideProgressBar: true,
+            type: "warning",
+          });
+          history.push("/registration");
+        })
+        .finally(() => setLoading(false));
+    });
 
     // for local
-    const api = new Api("1632222011");
-    setId("1632222011");
-    api
-      .userspoll()
-      .then(({ data }) => {
-        // setUserspoll(data);
-      })
-      .catch(() => {
-        toast(".userspoll() fail", {
-          hideProgressBar: true,
-          type: "warning",
-        });
-        history.push("/registration");
-      })
-      .finally(() => setLoading(false));
+    // const api = new Api("1632222011");
+    // setId("1632222011");
+    // api
+    //   .userspoll()
+    //   .then(({ data }) => {
+    //     // setUserspoll(data);
+    //   })
+    //   .catch(() => {
+    //     toast(".userspoll() fail", {
+    //       hideProgressBar: true,
+    //       type: "warning",
+    //     });
+    //     history.push("/registration");
+    //   })
+    //   .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -132,13 +140,17 @@ const AuthFencePage: React.FunctionComponent<IAuthFencePageProps> = (props) => {
         <Route path={`/chats`}>
           <ChatsPage />
         </Route>
-        <Route path={`/clubhouse`}>
+        <Route exact path={`/clubhouse`}>
           <Switcher />
           <ClubHouse />
         </Route>
         <Route exact path={`/tinder`}>
           <Switcher />
           <DashboardTinder />
+        </Route>
+        <Route exact path={`/clubhouse/room`}>
+          <Switcher />
+          <AudioRoomPage />
         </Route>
         <Route exact path={`/`}>
           <DashboardTinder />

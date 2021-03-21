@@ -1,5 +1,6 @@
 import * as React from "react";
-import UserIcon from '@heroicons/solid/user.svg'
+import UserIcon from "@heroicons/solid/user.svg";
+import { useHistory } from "react-router-dom";
 
 export interface IClubhouseCardProps {
   title: string;
@@ -10,21 +11,27 @@ export interface IClubhouseCardProps {
   peopleCount: number;
 }
 
-export const ClubhouseCard : React.FC<IClubhouseCardProps> = (props: IClubhouseCardProps) => {
-  const {title, tags, peopleCount} = props;
+export const ClubhouseCard: React.FC<IClubhouseCardProps> = (
+  props: IClubhouseCardProps,
+) => {
+  const { title, tags, peopleCount } = props;
+  const history = useHistory();
   return (
-    <div className="rounded-xl w-full p-4 bg-white shadow-xl">
+    <div
+      className="rounded-xl w-full p-4 bg-white shadow-xl"
+      onClick={(_) => history.push("/clubhouse/room")}
+    >
       <p className="text-black text-xl font-medium mb-3">{title}</p>
       <div className="flex justify-between">
         <div className="flex flex-wrap">
-          {tags.map((tag) =>
+          {tags.map((tag) => (
             <p
               key={tag.id}
               className="border border-green-700 mr-1 rounded-md px-1 text-sm mb-1"
             >
               {tag.name}
             </p>
-          )}
+          ))}
         </div>
         <div className="flex items-center">
           <p className="text-gray-600">{peopleCount}</p>
@@ -33,4 +40,4 @@ export const ClubhouseCard : React.FC<IClubhouseCardProps> = (props: IClubhouseC
       </div>
     </div>
   );
-}
+};

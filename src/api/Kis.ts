@@ -68,4 +68,8 @@ export class Api extends HttpClient {
   public likeUser = (id, body) => {
     return this.instance.put(`hacknu_users/${id}`, body);
   };
+
+  public getRandomUser = () => {
+    return this.instance.get("random_user");
+  };
 }

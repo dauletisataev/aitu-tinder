@@ -21,40 +21,40 @@ const App: React.FC = () => {
   const [isRegisted, setIsRegistred] = React.useState(false);
 
   // for aitu
-  // React.useEffect(() => {
-  //   aituBridge.getMe().then((data) => {
-  //     const api = new Api(hashString(data.id));
-  //     api
-  //       .who_am_i()
-  //       .then(() => {
-  //         toast("succes id = " + hashString(data.id), {
-  //           hideProgressBar: true,
-  //           type: "success",
-  //         });
-  //         setIsRegistred(true);
-  //       })
-  //       .finally(() => {
-  //         setLoading(false);
-  //       });
-  //   });
-  // }, []);
+  React.useEffect(() => {
+    aituBridge.getMe().then((data) => {
+      const api = new Api(hashString(data.id));
+      api
+        .who_am_i()
+        .then(() => {
+          toast("succes id = " + hashString(data.id), {
+            hideProgressBar: true,
+            type: "success",
+          });
+          setIsRegistred(true);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  }, []);
 
   // for local
-  React.useEffect(() => {
-    const api = new Api("1632222011");
-    api
-      .who_am_i()
-      .then(() => {
-        toast("succes id = " + 1632222011, {
-          hideProgressBar: true,
-          type: "success",
-        });
-        setIsRegistred(true);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+  // React.useEffect(() => {
+  //   const api = new Api("1632222011");
+  //   api
+  //     .who_am_i()
+  //     .then(() => {
+  //       // toast("succes id = " + 1632222011, {
+  //       //   hideProgressBar: true,
+  //       //   type: "success",
+  //       // });
+  //       setIsRegistred(true);
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+  // }, []);
 
   return (
     <StoreProvider store={store}>
